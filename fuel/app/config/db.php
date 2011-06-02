@@ -19,7 +19,7 @@ return array(
 		'type'			=> 'mysql',
 		'connection'	=> array(
 			'hostname'   => 'localhost',
-			'database'   => 'fuel_dev',
+			'database'   => 'dev8',
 			'username'   => 'root',
 			'password'   => '',
 			'persistent' => false,
