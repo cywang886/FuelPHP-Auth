@@ -43,7 +43,7 @@ The following are the steps required to get authentication working with FuelPHP.
 	<li>Copy core/config/migrations.php to app/config/migrations.php</li>
 	<li>Create the following scaffold
 		<pre lang="bash">
-php oil generate scaffold users username:string password:string email:string profile_fields:text group:integer[11] last_login:integer[20] login_hash:string
+php oil generate scaffold user username:string password:string email:string profile_fields:text group:integer[11] last_login:integer[20] login_hash:string
 		</pre>
 	</li>
 	<li>The above step will have created a new file for you in app/migrations called 001_create_users.php. Feel free to edit/modify this file before running the migrate task.</li>
@@ -54,7 +54,7 @@ $admin_password = "1234";
 $admin_pass_hash= \Auth::instance()->hash_password($admin_password);
 $admin_email    = "sidhu.j@gmail.com";
 
-$users = \Model_User::factory(array(
+$user = \Model_User::factory(array(
     'username' => $admin_username,
     'password' => $admin_pass_hash,
     'email' => $admin_email,
@@ -64,7 +64,7 @@ $users = \Model_User::factory(array(
     'login_hash' => '',
 ));
 
-if ($users and $users->save()) {
+if ($user and $user->save()) {
     \Cli::write("added admin account");
 } else {
     \Cli::write("failed to add admin account");
@@ -76,17 +76,17 @@ if ($users and $users->save()) {
 //Adding indexes to id fields
 $active_db = \Config::get('db.active');
 $table_prefix = \Config::get('db.'.$active_db.'.table_prefix');
-\DB::query("CREATE INDEX users_username ON ".$table_prefix."users (username)")->execute();
+\DB::query("CREATE INDEX user_username ON ".$table_prefix."user (username)")->execute();
 		</pre>
 	</li>
+	<li>Copy fuel/packages/auth/config/auth.php and simpleauth.php to fuel/app/config/</li>
+	<li>Edit app/config/simpleauth.php and change the tablename to 'users'</li>
 	<li>Now, we need to migrate our database to the above migration we just crated
 		<pre lang="bash">
 $ php oil refine migrate
 Migrated to latest version: 1.
 		</pre>
 	</li>
-	<li>Copy fuel/packages/auth/config/auth.php and simpleauth.php to fuel/app/config/</li>
-	<li>Edit app/config/simpleauth.php and change the tablename to 'users'</li>
 	<li>We are now going to create a common controller that will check if the user is logged in or not.
 <pre lang="bash">$ php oil generate  controller common
 Created view: APPPATH/views/common/index.php
@@ -99,7 +99,7 @@ public function before()
 	parent::before();
 	$uri_string = explode('/', Uri::string());
 	$this->template->logged_in = false;
-	if (count($uri_string)>1 and $uri_string[0] == 'users' and $uri_string[1] == 'login')
+	if (count($uri_string)>1 and $uri_string[0] == 'user' and $uri_string[1] == 'login')
 	{
 		return;
 	}
@@ -113,7 +113,7 @@ public function before()
 		}
 		else
 		{
-			\Response::redirect('/users/login');
+			\Response::redirect('/user/login');
 		}
 	}
 }
