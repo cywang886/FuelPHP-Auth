@@ -16,6 +16,28 @@ class Create_users {
 			'last_login' => array('constraint' => 20, 'type' => 'int'),
 			'login_hash' => array('constraint' => 255, 'type' => 'varchar'),
 		), array('id'));
+
+        // add an admin account
+        $admin_username = "jsidhu";
+        $admin_password = "1234";
+        $admin_pass_hash= \Auth::instance()->hash_password($admin_password);
+        $admin_email    = "sidhu.j@gmail.com";
+
+        $users = \Model_User::factory(array(
+            'username' => $admin_username,
+            'password' => $admin_pass_hash,
+            'email' => $admin_email,
+            'profile_fields' => '',
+            'group' => '',
+            'last_login' => '',
+            'login_hash' => '',
+        ));
+
+        if ($users and $users->save()) {
+            \Cli::write("added admin account");
+        } else {
+            \Cli::write("failed to add admin account");
+        }
 	}
 
 	public function down()

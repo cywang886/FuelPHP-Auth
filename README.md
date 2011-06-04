@@ -46,6 +46,29 @@ The following are the steps required to get authentication working with FuelPHP.
 php oil generate scaffold users username:string password:string email:string profile_fields:text group:integer[11] last_login:integer[20] login_hash:string
 		</pre>
 	</li>
+	<li>The above step will have created a new file for you in app/migrations called 001_create_users.php. Feel free to edit/modify this file before running the migrate task.</li>
+	<li>*OPTIONAL* If you want/need to create a record (a model), you can easily do so. The following little snipped can be added right after the create_table() call in the above migration:
+<pre lang="php">
+$admin_username = "jsidhu";
+$admin_password = "1234";
+$admin_pass_hash= \Auth::instance()->hash_password($admin_password);
+$admin_email    = "sidhu.j@gmail.com";
+
+$users = \Model_User::factory(array(
+    'username' => $admin_username,
+    'password' => $admin_pass_hash,
+    'email' => $admin_email,
+    'profile_fields' => '',
+    'group' => '',
+    'last_login' => '',
+    'login_hash' => '',
+));
+
+if ($users and $users->save()) {
+    \Cli::write("added admin account");
+} else {
+    \Cli::write("failed to add admin account");
+}</pre></li>
 	<li>
 		*OPTIONAL* If you want/need to create an index on your table then see this post for more information: <a href="http://fuelphp.com/forums/topics/view/1616">http://fuelphp.com/forums/topics/view/1616</a>
 		You need to edit the newly created migration (app/migrations/001_create_users.php) and add something like the following after create_table:
