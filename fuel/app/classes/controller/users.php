@@ -3,7 +3,7 @@ class Controller_Users extends Controller_Common {
 	
 	public function action_index()
 	{
-		$data['users'] = Model_Users::find('all');
+		$data['users'] = Model_User::find('all');
 		$this->template->title = "Users";
 		$this->template->content = View::factory('users/index', $data);
 	}
@@ -99,7 +99,7 @@ class Controller_Users extends Controller_Common {
     }
 	public function action_view($id = null)
 	{
-		$data['users'] = Model_Users::find($id);
+		$data['users'] = Model_User::find($id);
 		
 		$this->template->title = "Users";
 		$this->template->content = View::factory('users/view', $data);
@@ -109,7 +109,7 @@ class Controller_Users extends Controller_Common {
 	{
 		if (Input::method() == 'POST')
 		{
-			$users = Model_Users::factory(array(
+			$users = Model_User::factory(array(
 				'username' => Input::post('username'),
 				'password' => Input::post('password'),
 				'email' => Input::post('email'),
@@ -138,7 +138,7 @@ class Controller_Users extends Controller_Common {
 	
 	public function action_edit($id = null)
 	{
-		$users = Model_Users::find($id);
+		$users = Model_User::find($id);
 
 		if (Input::method() == 'POST')
 		{
@@ -174,7 +174,7 @@ class Controller_Users extends Controller_Common {
 	
 	public function action_delete($id = null)
 	{
-		if ($users = Model_Users::find($id))
+		if ($users = Model_User::find($id))
 		{
 			$users->delete();
 			

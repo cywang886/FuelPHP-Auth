@@ -319,3 +319,5 @@ To sign up for a new account, fill the form below with your account information.
 </ol>
 
 Thats it!  Any controller that inherits Controller_Common will be required to login. If you look at our Controller_Common, you'll see that there's a if statement that checks which page is being accessed. If we are accessin the User Controllers 'login' method, we dont require the user to be logged in, since asking the user to login for the login page is a bit ..counterproductive.
+
+
